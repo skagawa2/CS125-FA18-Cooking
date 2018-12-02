@@ -25,9 +25,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         imageToUpload = (ImageView) findViewById(R.id.imageToUpload);
 
-        identifyImage = (Button) findViewById(R.id.bUploadImage);
+        identifyImage = (Button) findViewById(R.id.identifyImage);
 
-        uploadImageName = (EditText) findViewById(R.id.etUploadName);
 
         imageToUpload.setOnClickListener(this);
         identifyImage.setOnClickListener(this);

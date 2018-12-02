@@ -14,16 +14,18 @@
         android:layout_width="100dp"
         android:layout_height="100dp" />
 
-        <EditText
-            android:id="@+id/etUploadName"
+        <Button
+            android:id="@+id/identifyImage"
+            android:text="@string/identify_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <Button
-            android:id="@+id/identifyImage"
-            android:text="Identify Image"
+        <TextView
+            android:id="@+id/dish"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="dish" />
 
     </LinearLayout>
 </ScrollView>

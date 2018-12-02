@@ -93,35 +93,35 @@ public final class R {
         public static final int action_text = 0x7f070016;
         public static final int actions = 0x7f070017;
         public static final int async = 0x7f07001d;
-        public static final int blocking = 0x7f070022;
-        public static final int bottom = 0x7f070023;
-        public static final int chronometer = 0x7f07002a;
-        public static final int end = 0x7f070038;
-        public static final int forever = 0x7f070040;
-        public static final int icon = 0x7f070046;
-        public static final int icon_group = 0x7f070047;
-        public static final int info = 0x7f07004c;
-        public static final int italic = 0x7f07004e;
-        public static final int left = 0x7f07004f;
-        public static final int line1 = 0x7f070050;
-        public static final int line3 = 0x7f070051;
-        public static final int none = 0x7f070058;
-        public static final int normal = 0x7f070059;
-        public static final int notification_background = 0x7f07005a;
-        public static final int notification_main_column = 0x7f07005b;
-        public static final int notification_main_column_container = 0x7f07005c;
-        public static final int right = 0x7f070064;
-        public static final int right_icon = 0x7f070065;
-        public static final int right_side = 0x7f070066;
-        public static final int start = 0x7f070082;
-        public static final int tag_transition_group = 0x7f070086;
-        public static final int tag_unhandled_key_event_manager = 0x7f070087;
-        public static final int tag_unhandled_key_listeners = 0x7f070088;
-        public static final int text = 0x7f070089;
-        public static final int text2 = 0x7f07008a;
-        public static final int time = 0x7f07008d;
-        public static final int title = 0x7f07008e;
-        public static final int top = 0x7f070091;
+        public static final int blocking = 0x7f070020;
+        public static final int bottom = 0x7f070021;
+        public static final int chronometer = 0x7f070028;
+        public static final int end = 0x7f070037;
+        public static final int forever = 0x7f07003d;
+        public static final int icon = 0x7f070043;
+        public static final int icon_group = 0x7f070044;
+        public static final int info = 0x7f070049;
+        public static final int italic = 0x7f07004b;
+        public static final int left = 0x7f07004c;
+        public static final int line1 = 0x7f07004d;
+        public static final int line3 = 0x7f07004e;
+        public static final int none = 0x7f070055;
+        public static final int normal = 0x7f070056;
+        public static final int notification_background = 0x7f070057;
+        public static final int notification_main_column = 0x7f070058;
+        public static final int notification_main_column_container = 0x7f070059;
+        public static final int right = 0x7f070061;
+        public static final int right_icon = 0x7f070062;
+        public static final int right_side = 0x7f070063;
+        public static final int start = 0x7f07007f;
+        public static final int tag_transition_group = 0x7f070083;
+        public static final int tag_unhandled_key_event_manager = 0x7f070084;
+        public static final int tag_unhandled_key_listeners = 0x7f070085;
+        public static final int text = 0x7f070086;
+        public static final int text2 = 0x7f070087;
+        public static final int time = 0x7f07008a;
+        public static final int title = 0x7f07008b;
+        public static final int top = 0x7f07008e;
     }
     public static final class integer {
         private integer() {}
@@ -141,7 +141,7 @@ public final class R {
     public static final class string {
         private string() {}
 
-        public static final int status_bar_notification_info_overflow = 0x7f0b0029;
+        public static final int status_bar_notification_info_overflow = 0x7f0b002a;
     }
     public static final class style {
         private style() {}

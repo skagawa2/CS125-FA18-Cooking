@@ -4,6 +4,7 @@
 
 This project is meant to be an exploration of Web APIs in order to make a simple Android application.
 
+
 ## Methods
 
 (TBD)

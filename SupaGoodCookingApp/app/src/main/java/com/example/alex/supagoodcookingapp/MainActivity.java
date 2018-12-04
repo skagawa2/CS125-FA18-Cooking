@@ -1,10 +1,7 @@
 package com.example.alex.supagoodcookingapp;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.icu.util.Output;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
@@ -19,25 +16,23 @@ import android.util.Log;
 
 import clarifai2.api.ClarifaiBuilder;
 import clarifai2.api.ClarifaiClient;
-import clarifai2.api.ClarifaiResponse;
 import clarifai2.dto.input.ClarifaiInput;
-import clarifai2.dto.model.Model;
 import clarifai2.dto.model.output.ClarifaiOutput;
 import clarifai2.dto.prediction.Concept;
 
-import java.util.Arrays;
 import java.util.List;
 import java.io.File;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import static android.app.Activity.RESULT_OK;
-import static android.content.ContentValues.TAG;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
     private static final int RESULT_LOAD_IMAGE = 1;
 
     ImageView imageToUpload;
     Button identifyImage;
-    EditText uploadImageName;
+    android.support.v7.widget.AppCompatTextView outputTextBox;
     ClarifaiClient client;
     Uri selectedImage;
 
@@ -58,6 +53,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         imageToUpload.setOnClickListener(this);
         identifyImage.setOnClickListener(this);
+
+        outputTextBox = (android.support.v7.widget.AppCompatTextView) findViewById(R.id.outputText);
     }
 
     @Override
@@ -70,10 +67,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.identifyImage:
                 Connection conn = new Connection();
                 conn.execute("");
-                System.out.println(conn.getResponse());
+                try {
+                    outputTextBox.setText(waitUntilResponse(conn, 10));
+                } catch (Exception e) {
+                    Log.e("identifyImage", "exception: " + e.getMessage());
+                }
                 break;
         }
     }
+
+    private void setTextView(String setText) {
+        outputTextBox.setText(setText);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -148,18 +154,58 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         private List<ClarifaiOutput<Concept>> response;
+        private String display = "";
 
         private void connect() {
             response = client.getDefaultModels()
                     .foodModel()
                     .predict()
                     .withInputs(ClarifaiInput.forImage(new File(getRealPathFromURI(selectedImage))))
+                    .withMinValue(0.8) // minimum prediction value
                     .executeSync()
                     .get();
+            Log.d("ClarifaiOutput", "output from API: " + response.toString());
+
+            display = "Clarifai Prediction Rankings: \n";
+            for (ClarifaiOutput<Concept> output : response) {
+                int maxFoodNameLen = 0;
+                for (Concept concept : output.data()) {
+                    if (concept.name().length() > maxFoodNameLen) {
+                        maxFoodNameLen = concept.name().length();
+                    }
+                }
+                for (int i = 0; i < output.data().size(); i++) {
+                    String foodName = output.data().get(i).name();
+                    double predictionScore = output.data().get(i).value();
+                    display += String.format("%d) foodName: %-"
+                            + maxFoodNameLen + "spredictionScore: %.2f%%\n",
+                            i+1, foodName, predictionScore * 100);
+                }
+            }
         }
 
-        public List<ClarifaiOutput<Concept>> getResponse() {
-            return response;
+        public String getResponse() {
+            return display;
         }
+    }
+
+    // https://sqa.stackexchange.com/questions/29379/how-to-wait-for-an-api-request-to-return-a-response
+    public String waitUntilResponse(Connection conn, int TIMEOUT) throws Exception {
+        String result = "";
+        int i = 0;
+        while (i < TIMEOUT) {
+            result = conn.getResponse();
+            if (!result.equals("")) {
+                break;
+            } else {
+                Log.d("waitUntilResponse", "waiting...");
+                TimeUnit.SECONDS.sleep(1);
+                ++i;
+                if (i == TIMEOUT) {
+                    throw new TimeoutException("Timed out after waiting for " + i + " seconds");
+                }
+            }
+        }
+        return result;
     }
 }

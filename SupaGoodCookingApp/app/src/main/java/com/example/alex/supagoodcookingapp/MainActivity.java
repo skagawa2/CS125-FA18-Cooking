@@ -70,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.identifyImage:
                 Connection conn = new Connection();
                 conn.execute("");
+                System.out.println(conn.getResponse());
                 break;
         }
     }
@@ -146,28 +147,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return null;
         }
 
-        private ClarifaiResponse<List<ClarifaiOutput<Concept>>> response;
+        private List<ClarifaiOutput<Concept>> response;
 
         private void connect() {
             response = client.getDefaultModels()
                     .foodModel()
-                    .predict(new Model.ModelCallbacks() {
-                        @Override
-                        public void PredictionComplete(boolean successful, Error error) {
-                            if (successful) {
-                                List outputs = model.getOutputs();
-                                for (Output output: outputs) {
-                                    List concepts = output.getDataAsset().getConcepts();
-                                    Log.d(concepts);
-                                }
-                            } else {
-                                Log.e(TAG, error.getErrorMessage());
-                            }
-                        }
-                    })
+                    .predict()
                     .withInputs(ClarifaiInput.forImage(new File(getRealPathFromURI(selectedImage))))
-                    .executeSync();
-            Log.d("clarifai", response.toString());
+                    .executeSync()
+                    .get();
+        }
+
+        public List<ClarifaiOutput<Concept>> getResponse() {
+            return response;
         }
     }
 }

@@ -20,8 +20,10 @@ import clarifai2.dto.input.ClarifaiInput;
 import clarifai2.dto.model.output.ClarifaiOutput;
 import clarifai2.dto.prediction.Concept;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 import java.io.File;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
@@ -36,13 +38,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ClarifaiClient client;
     Uri selectedImage;
 
-    public MainActivity() {
-        String APIKEY = "d32c8dd9ed844a9a8c06f8d857a54011";
-        client = new ClarifaiBuilder(APIKEY).buildSync();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Scanner in = null;
+        try {
+            in = new Scanner(new File("apikey.txt"));
+        } catch (FileNotFoundException e) {
+            Log.e("API Key Scan", "apikey.txt not found");
+        }
+        String APIKEY = in.nextLine();
+        Log.d("key", APIKEY);
+        client = new ClarifaiBuilder(APIKEY).buildSync();
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 

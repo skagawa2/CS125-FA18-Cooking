@@ -22,6 +22,7 @@ import clarifai2.dto.prediction.Concept;
 
 import java.util.List;
 import java.io.File;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
@@ -37,7 +38,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Uri selectedImage;
 
     public MainActivity() {
-        String APIKEY = "d32c8dd9ed844a9a8c06f8d857a54011";
+        Scanner in = new Scanner("apikey.txt");
+        String APIKEY = in.nextLine();
         client = new ClarifaiBuilder(APIKEY).buildSync();
     }
 

@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.icu.util.Output;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
@@ -20,6 +21,7 @@ import clarifai2.api.ClarifaiBuilder;
 import clarifai2.api.ClarifaiClient;
 import clarifai2.api.ClarifaiResponse;
 import clarifai2.dto.input.ClarifaiInput;
+import clarifai2.dto.model.Model;
 import clarifai2.dto.model.output.ClarifaiOutput;
 import clarifai2.dto.prediction.Concept;
 
@@ -40,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Uri selectedImage;
 
     public MainActivity() {
-        String APIKEY = "";
+        String APIKEY = "d32c8dd9ed844a9a8c06f8d857a54011";
         client = new ClarifaiBuilder(APIKEY).buildSync();
     }
 
@@ -56,7 +58,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         imageToUpload.setOnClickListener(this);
         identifyImage.setOnClickListener(this);
-        requestPermissions();
     }
 
     @Override
@@ -97,46 +98,46 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    private static final int WRITE_EXTERNAL_STORAGE = 0;
-    private static final int READ_EXTERNAL_STORAGE = 1;
-
-    /**
-     * Requests the Camera permission.
-     * If the permission has been denied previously, a SnackBar will prompt the user to grant the
-     * permission, otherwise it is requested directly.
-     */
-    private void requestPermissions() {
-        ActivityCompat.requestPermissions(this, new String[] {
-                        Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.INTERNET},
-                WRITE_EXTERNAL_STORAGE);
-    }
-
-    /**
-     * From Google Sample: https://github.com/googlesamples/android-RuntimePermissions/blob/master/Application/src/main/java/com/example/android/system/runtimepermissions/MainActivity.java
-     * Callback received when a permissions request has been completed.
-     */
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                           int[] grantResults) {
-
-        if (requestCode == WRITE_EXTERNAL_STORAGE) {
-            // BEGIN_INCLUDE(permission_result)
-            // Received permission result for camera permission.
-            Log.i(TAG, "Received response for Camera permission request: " + Arrays.toString(permissions) + " \ngrantResults: " + Arrays.toString(grantResults));
-
-            // Check if the only required permission has been granted
-            if (grantResults.length == 3 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Camera permission has been granted, preview can be displayed
-                Log.i(TAG, "CAMERA permission has now been granted. Showing preview.");
-            } else {
-                Log.i(TAG, "CAMERA permission was NOT granted.");
-            }
-            // END_INCLUDE(permission_result)
-
-        }
-    }
+//    private static final int WRITE_EXTERNAL_STORAGE = 0;
+//    private static final int READ_EXTERNAL_STORAGE = 1;
+//
+//    /**
+//     * Requests the Camera permission.
+//     * If the permission has been denied previously, a SnackBar will prompt the user to grant the
+//     * permission, otherwise it is requested directly.
+//     */
+//    private void requestPermissions() {
+//        ActivityCompat.requestPermissions(this, new String[] {
+//                        Manifest.permission.READ_EXTERNAL_STORAGE,
+//                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+//                        Manifest.permission.INTERNET},
+//                WRITE_EXTERNAL_STORAGE);
+//    }
+//
+//    /**
+//     * From Google Sample: https://github.com/googlesamples/android-RuntimePermissions/blob/master/Application/src/main/java/com/example/android/system/runtimepermissions/MainActivity.java
+//     * Callback received when a permissions request has been completed.
+//     */
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+//                                           int[] grantResults) {
+//
+//        if (requestCode == WRITE_EXTERNAL_STORAGE) {
+//            // BEGIN_INCLUDE(permission_result)
+//            // Received permission result for camera permission.
+//            Log.i(TAG, "Received response for Camera permission request: " + Arrays.toString(permissions) + " \ngrantResults: " + Arrays.toString(grantResults));
+//
+//            // Check if the only required permission has been granted
+//            if (grantResults.length == 3 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                // Camera permission has been granted, preview can be displayed
+//                Log.i(TAG, "CAMERA permission has now been granted. Showing preview.");
+//            } else {
+//                Log.i(TAG, "CAMERA permission was NOT granted.");
+//            }
+//            // END_INCLUDE(permission_result)
+//
+//        }
+//    }
 
     private class Connection extends AsyncTask {
         @Override
@@ -150,7 +151,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         private void connect() {
             response = client.getDefaultModels()
                     .foodModel()
-                    .predict()
+                    .predict(new Model.ModelCallbacks() {
+                        @Override
+                        public void PredictionComplete(boolean successful, Error error) {
+                            if (successful) {
+                                List outputs = model.getOutputs();
+                                for (Output output: outputs) {
+                                    List concepts = output.getDataAsset().getConcepts();
+                                    Log.d(concepts);
+                                }
+                            } else {
+                                Log.e(TAG, error.getErrorMessage());
+                            }
+                        }
+                    })
                     .withInputs(ClarifaiInput.forImage(new File(getRealPathFromURI(selectedImage))))
                     .executeSync();
             Log.d("clarifai", response.toString());

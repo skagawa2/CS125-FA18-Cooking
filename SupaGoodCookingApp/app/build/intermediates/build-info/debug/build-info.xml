@@ -5,33 +5,31 @@
     build-mode="COLD"
     density="560dpi"
     format="10"
-    ir-eligibility="METHOD_DELETED"
     plugin-version="3.2.1"
-    timestamp="1543806284320"
+    timestamp="1543950247492"
     token="-3609464907789702434"
     verifier="COLD_SWAP_REQUESTED" >
 
     <task
         name="javac"
-        duration="65" />
+        duration="0" />
     <task
         name="instant-run-dex"
         duration="0" />
     <task
         name="instant-run-transform"
-        duration="25" />
+        duration="0" />
     <task
         name="verifier"
-        duration="2" />
-
-    <artifact
-        location="/Users/shawkagawa/Documents/UIUC/Fall 2018/CS 125/CS125-FA18-Cooking/SupaGoodCookingApp/app/build/intermediates/split-apk/debug/slices/slice_4.apk"
-        type="SPLIT" />
+        duration="0" />
 
     <build
         build-mode="FULL"
-        timestamp="1543805421964"
+        timestamp="1543950200095"
         verifier="FULL_BUILD_REQUESTED" >
+        <artifact
+            location="/Users/shawkagawa/Documents/UIUC/Fall 2018/CS 125/CS125-FA18-Cooking/SupaGoodCookingApp/app/build/intermediates/split-apk/debug/slices/slice_4.apk"
+            type="SPLIT" />
         <artifact
             location="/Users/shawkagawa/Documents/UIUC/Fall 2018/CS 125/CS125-FA18-Cooking/SupaGoodCookingApp/app/build/intermediates/split-apk/debug/dep/dependencies.apk"
             type="SPLIT" />
@@ -60,9 +58,6 @@
             location="/Users/shawkagawa/Documents/UIUC/Fall 2018/CS 125/CS125-FA18-Cooking/SupaGoodCookingApp/app/build/intermediates/split-apk/debug/slices/slice_3.apk"
             type="SPLIT" />
         <artifact
-            location="/Users/shawkagawa/Documents/UIUC/Fall 2018/CS 125/CS125-FA18-Cooking/SupaGoodCookingApp/app/build/intermediates/split-apk/debug/slices/slice_4.apk"
-            type="SPLIT" />
-        <artifact
             location="/Users/shawkagawa/Documents/UIUC/Fall 2018/CS 125/CS125-FA18-Cooking/SupaGoodCookingApp/app/build/intermediates/split-apk/debug/slices/slice_2.apk"
             type="SPLIT" />
         <artifact
@@ -74,12 +69,7 @@
     </build>
     <build
         build-mode="COLD"
-        ir-eligibility="METHOD_DELETED"
-        timestamp="1543806284320"
-        verifier="COLD_SWAP_REQUESTED" >
-        <artifact
-            location="/Users/shawkagawa/Documents/UIUC/Fall 2018/CS 125/CS125-FA18-Cooking/SupaGoodCookingApp/app/build/intermediates/split-apk/debug/slices/slice_4.apk"
-            type="SPLIT" />
-    </build>
+        timestamp="1543950247492"
+        verifier="COLD_SWAP_REQUESTED" />
 
 </instant-run>

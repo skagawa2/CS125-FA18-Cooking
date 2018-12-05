@@ -1,4 +1,4 @@
-#Tue Dec 04 14:55:31 CST 2018
+#Wed Dec 05 13:44:06 CST 2018
 base.0=/Users/shawkagawa/Documents/UIUC/Fall 2018/CS 125/CS125-FA18-Cooking/SupaGoodCookingApp/app/build/intermediates/transforms/dexMerger/debug/4
 path.0=classes.dex
 renamed.0=classes.dex

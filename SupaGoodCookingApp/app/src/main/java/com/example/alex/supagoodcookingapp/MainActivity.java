@@ -38,19 +38,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ClarifaiClient client;
     Uri selectedImage;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Scanner in = null;
-        try {
-            in = new Scanner(new File("apikey.txt"));
-        } catch (FileNotFoundException e) {
-            Log.e("API Key Scan", "apikey.txt not found");
-        }
-        String APIKEY = in.nextLine();
-        Log.d("key", APIKEY);
-        client = new ClarifaiBuilder(APIKEY).buildSync();
-
+        client = new ClarifaiBuilder(BuildConfig.ClarifaiApiKey).buildSync();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);

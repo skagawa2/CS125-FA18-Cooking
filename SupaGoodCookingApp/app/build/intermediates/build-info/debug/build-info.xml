@@ -5,27 +5,32 @@
     build-mode="COLD"
     density="560dpi"
     format="10"
+    ir-eligibility="FIELD_REMOVED"
     plugin-version="3.2.1"
-    timestamp="1543956951911"
+    timestamp="1544039044471"
     token="-3609464907789702434"
     verifier="COLD_SWAP_REQUESTED" >
 
     <task
         name="javac"
-        duration="0" />
+        duration="427" />
     <task
         name="instant-run-dex"
         duration="0" />
     <task
         name="instant-run-transform"
-        duration="0" />
+        duration="42" />
     <task
         name="verifier"
-        duration="0" />
+        duration="5" />
+
+    <artifact
+        location="/Users/shawkagawa/Documents/UIUC/Fall 2018/CS 125/CS125-FA18-Cooking/SupaGoodCookingApp/app/build/intermediates/split-apk/debug/slices/slice_4.apk"
+        type="SPLIT" />
 
     <build
         build-mode="FULL"
-        timestamp="1543952890945"
+        timestamp="1544036961475"
         verifier="FULL_BUILD_REQUESTED" >
         <artifact
             location="/Users/shawkagawa/Documents/UIUC/Fall 2018/CS 125/CS125-FA18-Cooking/SupaGoodCookingApp/app/build/intermediates/split-apk/debug/dep/dependencies.apk"
@@ -69,52 +74,12 @@
     </build>
     <build
         build-mode="COLD"
-        ir-eligibility="R_CLASS_CHANGE"
-        timestamp="1543953545079"
-        verifier="COLD_SWAP_REQUESTED" >
-        <artifact
-            location="/Users/shawkagawa/Documents/UIUC/Fall 2018/CS 125/CS125-FA18-Cooking/SupaGoodCookingApp/app/build/intermediates/resources/instant-run/debug/resources-debug.apk"
-            type="SPLIT" />
-        <artifact
-            location="/Users/shawkagawa/Documents/UIUC/Fall 2018/CS 125/CS125-FA18-Cooking/SupaGoodCookingApp/app/build/intermediates/split-apk/debug/slices/slice_0.apk"
-            type="SPLIT" />
-        <artifact
-            location="/Users/shawkagawa/Documents/UIUC/Fall 2018/CS 125/CS125-FA18-Cooking/SupaGoodCookingApp/app/build/intermediates/split-apk/debug/slices/slice_1.apk"
-            type="SPLIT" />
-        <artifact
-            location="/Users/shawkagawa/Documents/UIUC/Fall 2018/CS 125/CS125-FA18-Cooking/SupaGoodCookingApp/app/build/intermediates/split-apk/debug/slices/slice_2.apk"
-            type="SPLIT" />
-        <artifact
-            location="/Users/shawkagawa/Documents/UIUC/Fall 2018/CS 125/CS125-FA18-Cooking/SupaGoodCookingApp/app/build/intermediates/split-apk/debug/slices/slice_3.apk"
-            type="SPLIT" />
-        <artifact
-            location="/Users/shawkagawa/Documents/UIUC/Fall 2018/CS 125/CS125-FA18-Cooking/SupaGoodCookingApp/app/build/intermediates/split-apk/debug/slices/slice_5.apk"
-            type="SPLIT" />
-        <artifact
-            location="/Users/shawkagawa/Documents/UIUC/Fall 2018/CS 125/CS125-FA18-Cooking/SupaGoodCookingApp/app/build/intermediates/split-apk/debug/slices/slice_6.apk"
-            type="SPLIT" />
-        <artifact
-            location="/Users/shawkagawa/Documents/UIUC/Fall 2018/CS 125/CS125-FA18-Cooking/SupaGoodCookingApp/app/build/intermediates/split-apk/debug/slices/slice_7.apk"
-            type="SPLIT" />
-        <artifact
-            location="/Users/shawkagawa/Documents/UIUC/Fall 2018/CS 125/CS125-FA18-Cooking/SupaGoodCookingApp/app/build/intermediates/split-apk/debug/slices/slice_8.apk"
-            type="SPLIT" />
-        <artifact
-            location="/Users/shawkagawa/Documents/UIUC/Fall 2018/CS 125/CS125-FA18-Cooking/SupaGoodCookingApp/app/build/intermediates/split-apk/debug/slices/slice_9.apk"
-            type="SPLIT" />
-    </build>
-    <build
-        build-mode="COLD"
-        ir-eligibility="COMPATIBLE"
-        timestamp="1543956930234"
+        ir-eligibility="FIELD_REMOVED"
+        timestamp="1544039044471"
         verifier="COLD_SWAP_REQUESTED" >
         <artifact
             location="/Users/shawkagawa/Documents/UIUC/Fall 2018/CS 125/CS125-FA18-Cooking/SupaGoodCookingApp/app/build/intermediates/split-apk/debug/slices/slice_4.apk"
             type="SPLIT" />
     </build>
-    <build
-        build-mode="COLD"
-        timestamp="1543956951911"
-        verifier="COLD_SWAP_REQUESTED" />
 
 </instant-run>

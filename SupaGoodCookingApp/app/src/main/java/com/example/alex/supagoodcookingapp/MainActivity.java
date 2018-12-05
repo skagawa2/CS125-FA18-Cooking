@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.util.Log;
+import android.widget.TextView;
 
 import clarifai2.api.ClarifaiBuilder;
 import clarifai2.api.ClarifaiClient;
@@ -25,10 +26,21 @@ import java.io.File;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import static android.app.Activity.RESULT_OK;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
     private static final int RESULT_LOAD_IMAGE = 1;
+    private static RequestQueue requestQueue;
 
     ImageView imageToUpload;
     Button identifyImage;
@@ -44,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         imageToUpload = (ImageView) findViewById(R.id.imageToUpload);
-
+        requestQueue = Volley.newRequestQueue(this);
         identifyImage = (Button) findViewById(R.id.identifyImage);
 
 
@@ -199,5 +211,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
         return result;
+    }
+    void startAPICall(android.view.View view) {
+        startAPICall();
+    }
+    void startAPICall() {
+        try {
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                    Request.Method.GET,
+                    "http://maps.openweathermap.org/maps/2.0/weather/TA2/1/40.12/-88.24?appid=b7f6c30d3cb9a194145a53049f96165a",
+                    null,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(final JSONObject response) {
+                            Log.d("Recipe", response.toString());
+                            writeQuote(response);
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(final VolleyError error) {
+                    Log.w("Recipe", error.toString());
+                }
+            });
+            requestQueue.add(jsonObjectRequest);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void writeQuote(final JSONObject response) {
+        try {
+            final TextView readout = findViewById(R.id.jsonResult);
+            readout.setText(response.get("quote").toString());
+        } catch (JSONException exception) {
+        }
     }
 }

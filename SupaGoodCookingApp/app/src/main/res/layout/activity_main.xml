@@ -27,5 +27,15 @@
             android:layout_gravity="center_horizontal"
             android:text="dish" />
 
+        <TextView
+            android:id="@+id/jsonResult"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:fontFamily="sans-serif-condensed"
+            android:text=""
+            android:textAlignment="viewStart"
+            android:textColor="@android:color/black" />
+
     </LinearLayout>
 </ScrollView>

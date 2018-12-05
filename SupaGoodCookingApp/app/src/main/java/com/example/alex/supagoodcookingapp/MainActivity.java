@@ -21,6 +21,7 @@ import clarifai2.dto.input.ClarifaiInput;
 import clarifai2.dto.model.output.ClarifaiOutput;
 import clarifai2.dto.prediction.Concept;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.io.File;
 import java.util.concurrent.TimeUnit;
@@ -165,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     .foodModel()
                     .predict()
                     .withInputs(ClarifaiInput.forImage(new File(getRealPathFromURI(selectedImage))))
-                    .withMinValue(0.8) // minimum prediction value
+                    .withMinValue(0.92) // minimum prediction value
                     .executeSync()
                     .get();
             Log.d("ClarifaiOutput", "output from API: " + response.toString());
@@ -180,6 +181,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 for (int i = 0; i < output.data().size(); i++) {
                     String foodName = output.data().get(i).name();
+                    foodNames.add(foodName);
                     double predictionScore = output.data().get(i).value();
                     display += String.format("%d) foodName: %-"
                             + maxFoodNameLen + "spredictionScore: %.2f%%\n",
@@ -245,4 +247,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } catch (JSONException exception) {
         }
     }
+
+
+    List<String> foodNames = new ArrayList<>();
+
+    
 }

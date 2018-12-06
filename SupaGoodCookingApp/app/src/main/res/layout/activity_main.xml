@@ -18,24 +18,32 @@
             android:id="@+id/identifyImage"
             android:text="@string/identify_image"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed" />
 
         <TextView
             android:id="@+id/outputText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:fontFamily="sans-serif-condensed"
             android:text="dish" />
+
+        <Button
+            android:id="@+id/getrecipes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed"
+            android:onClick="startAPICall"
+            android:text="Get Recipes" />
 
         <TextView
             android:id="@+id/jsonResult"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="start"
+            android:layout_gravity="center_horizontal"
             android:fontFamily="sans-serif-condensed"
-            android:text=""
-            android:textAlignment="viewStart"
-            android:textColor="@android:color/black" />
+            android:text="recipe" />
 
     </LinearLayout>
 </ScrollView>

@@ -2,12 +2,12 @@
     android:layout_width="match_parent"
     android:padding="10dp"
     android:layout_height="match_parent">
-    
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        
+
         <ImageView
             android:id="@+id/imageToUpload"
             android:layout_gravity="center_horizontal"
@@ -44,6 +44,12 @@
             android:layout_gravity="center_horizontal"
             android:fontFamily="sans-serif-condensed"
             android:text="recipe" />
+
+        <ImageView
+            android:id="@+id/urlImage"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="100dp"
+            android:layout_height="100dp" />
 
     </LinearLayout>
 </ScrollView>

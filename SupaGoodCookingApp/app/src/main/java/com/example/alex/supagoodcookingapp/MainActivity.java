@@ -1,3 +1,4 @@
+
 package com.example.alex.supagoodcookingapp;
 
 import android.content.Intent;
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final String EOL = "\n";
 
     ImageView imageToUpload;
+    ImageView urlImage;
     Button identifyImage;
     android.support.v7.widget.AppCompatTextView outputTextBox;
     ClarifaiClient client;
@@ -62,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         imageToUpload = (ImageView) findViewById(R.id.imageToUpload);
         requestQueue = Volley.newRequestQueue(this);
         identifyImage = (Button) findViewById(R.id.identifyImage);
-
+        urlImage = (ImageView) findViewById(R.id.urlImage);
 
         imageToUpload.setOnClickListener(this);
         identifyImage.setOnClickListener(this);
@@ -169,7 +171,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     .foodModel()
                     .predict()
                     .withInputs(ClarifaiInput.forImage(new File(getRealPathFromURI(selectedImage))))
-                    .withMinValue(0.92) // minimum prediction value
+                    .withMinValue(0.98) // minimum prediction value
                     .executeSync()
                     .get();
             Log.d("ClarifaiOutput", "output from API: " + response.toString());
@@ -182,12 +184,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         maxFoodNameLen = concept.name().length();
                     }
                 }
+                foodNames = new ArrayList<>();
                 for (int i = 0; i < output.data().size(); i++) {
                     String foodName = output.data().get(i).name();
                     foodNames.add(foodName);
                     double predictionScore = output.data().get(i).value();
                     display += String.format("%d) foodName: %-"
-                            + maxFoodNameLen + "s predictionScore: %.2f%%\n",
+                                    + maxFoodNameLen + "s predictionScore: %.2f%%\n",
                             i+1, foodName, predictionScore * 100);
                 }
             }
@@ -232,6 +235,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         // remove the extra comma at the end
         requestURL = requestURL.substring(0, requestURL.length() - 1);
+        Log.d("Whattosearch", requestURL);
 
         try {
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(

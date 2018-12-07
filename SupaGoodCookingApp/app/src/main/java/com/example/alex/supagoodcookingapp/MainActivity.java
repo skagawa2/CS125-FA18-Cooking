@@ -1,5 +1,8 @@
 package com.example.alex.supagoodcookingapp;
 
+import java.util.List;
+import java.util.ArrayList;
+
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -21,10 +24,8 @@ import clarifai2.dto.input.ClarifaiInput;
 import clarifai2.dto.model.output.ClarifaiOutput;
 import clarifai2.dto.prediction.Concept;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.io.File;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
@@ -37,14 +38,12 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONArray;
 
 import static android.app.Activity.RESULT_OK;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
     private static final int RESULT_LOAD_IMAGE = 1;
     private static RequestQueue requestQueue;
-    private static final String EOL = "\n";
 
     ImageView imageToUpload;
     Button identifyImage;
@@ -169,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     .foodModel()
                     .predict()
                     .withInputs(ClarifaiInput.forImage(new File(getRealPathFromURI(selectedImage))))
-                    .withMinValue(0.92) // minimum prediction value
+                    .withMinValue(0.8) // minimum prediction value
                     .executeSync()
                     .get();
             Log.d("ClarifaiOutput", "output from API: " + response.toString());
@@ -184,10 +183,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 for (int i = 0; i < output.data().size(); i++) {
                     String foodName = output.data().get(i).name();
-                    foodNames.add(foodName);
                     double predictionScore = output.data().get(i).value();
                     display += String.format("%d) foodName: %-"
-                            + maxFoodNameLen + "s predictionScore: %.2f%%\n",
+                            + maxFoodNameLen + "spredictionScore: %.2f%%\n",
                             i+1, foodName, predictionScore * 100);
                 }
             }
@@ -217,26 +215,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         return result;
     }
-
-    private List<String> foodNames = new ArrayList<>();
     void startAPICall(android.view.View view) {
         startAPICall();
     }
     void startAPICall() {
-
-        // create request URL from the food names
-        String requestURL = String.format("https://www.food2fork.com/api/search?key=%s&q=", BuildConfig.Food2ForkApiKey);
-        for (String foodName : foodNames) {
-            String spaceReplaced = foodName.replace(" ", "%20");
-            requestURL += spaceReplaced + ",";
-        }
-        // remove the extra comma at the end
-        requestURL = requestURL.substring(0, requestURL.length() - 1);
-
         try {
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                     Request.Method.GET,
-                    requestURL,
+                    "https://www.food2fork.com/api/search?key=Food2ForkApiKey&q=",
                     null,
                     new Response.Listener<JSONObject>() {
                         @Override
@@ -258,25 +244,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void writeQuote(final JSONObject response) {
         try {
             final TextView readout = findViewById(R.id.jsonResult);
-
-            String toDisplay = "";
-            JSONArray recipes = (JSONArray) response.get("recipes");
-            for (int i = 0; i < recipes.length(); i++) {
-                JSONObject recipe = recipes.getJSONObject(i);
-                String recipeTitle = (String) recipe.get("title");
-                String recipeURL = (String) recipe.get("source_url");
-                String imageURL = (String) recipe.get("image_url");
-                String publisherURL = (String) recipe.get("publisher_url");
-                double socialRank = (double) recipe.get("social_rank");
-
-                toDisplay += "Score: " + Math.round(socialRank) + ": " + recipeTitle + " @ " + recipeURL + EOL;
-            }
-
-            readout.setText(toDisplay);
+            readout.setText(response.get("quote").toString());
         } catch (JSONException exception) {
-            Log.e("JSONException", exception.getMessage());
-        } catch (ClassCastException exception) {
-            Log.e("ClassCastException", exception.getMessage());
         }
     }
 }

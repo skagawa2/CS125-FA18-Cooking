@@ -252,7 +252,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             });
             requestQueue.add(jsonObjectRequest);
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("JsonObjectRequest", e.getMessage());
         }
     }
     public void writeQuote(final JSONObject response) {

@@ -35,6 +35,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -64,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         imageToUpload = (ImageView) findViewById(R.id.imageToUpload);
         requestQueue = Volley.newRequestQueue(this);
         identifyImage = (Button) findViewById(R.id.identifyImage);
-        urlImage = (ImageView) findViewById(R.id.urlImage);
+        urlImage = (ImageView) findViewById(R.id.urlImage)
 
         imageToUpload.setOnClickListener(this);
         identifyImage.setOnClickListener(this);
@@ -272,6 +273,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 String imageURL = (String) recipe.get("image_url");
                 String publisherURL = (String) recipe.get("publisher_url");
                 double socialRank = (double) recipe.get("social_rank");
+                Log.d("ImageURLtosearch", imageURL);
+                Picasso.get().load(imageURL).into(urlImage);
 
                 toDisplay += "Score: " + Math.round(socialRank) + ": " + recipeTitle + " @ " + recipeURL + EOL;
             }

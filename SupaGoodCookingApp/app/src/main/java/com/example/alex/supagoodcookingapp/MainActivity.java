@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         imageToUpload = (ImageView) findViewById(R.id.imageToUpload);
         requestQueue = Volley.newRequestQueue(this);
         identifyImage = (Button) findViewById(R.id.identifyImage);
-        urlImage = (ImageView) findViewById(R.id.urlImage)
+        urlImage = (ImageView) findViewById(R.id.urlImage);
 
         imageToUpload.setOnClickListener(this);
         identifyImage.setOnClickListener(this);

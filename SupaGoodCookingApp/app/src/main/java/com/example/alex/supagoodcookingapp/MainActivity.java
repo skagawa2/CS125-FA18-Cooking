@@ -87,6 +87,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Acti
 
         imageToUpload.setOnClickListener(this);
         identifyImage.setOnClickListener(this);
+        add.setOnClickListener(this);
 
         outputTextBox = findViewById(R.id.outputText);
     }

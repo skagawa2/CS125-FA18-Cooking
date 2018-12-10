@@ -1,19 +1,26 @@
 
 package com.example.alex.supagoodcookingapp;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.util.Log;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import clarifai2.api.ClarifaiBuilder;
@@ -22,6 +29,12 @@ import clarifai2.dto.input.ClarifaiInput;
 import clarifai2.dto.model.output.ClarifaiOutput;
 import clarifai2.dto.prediction.Concept;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.File;
@@ -33,27 +46,28 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpResponse;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONArray;
 
-import static android.app.Activity.RESULT_OK;
+import static android.content.ContentValues.TAG;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
+public class MainActivity extends Activity implements View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
+
     private static final int RESULT_LOAD_IMAGE = 1;
     private static RequestQueue requestQueue;
-    private static final String EOL = "\n";
 
     ImageView imageToUpload;
-    ImageView urlImage;
     Button identifyImage;
-    android.support.v7.widget.AppCompatTextView outputTextBox;
+    TextView outputTextBox;
     ClarifaiClient client;
     Uri selectedImage;
+
+    Activity mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,16 +75,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mContext = this;
 
-        imageToUpload = (ImageView) findViewById(R.id.imageToUpload);
+        imageToUpload = findViewById(R.id.imageToUpload);
         requestQueue = Volley.newRequestQueue(this);
-        identifyImage = (Button) findViewById(R.id.identifyImage);
-        urlImage = (ImageView) findViewById(R.id.urlImage);
+        identifyImage = findViewById(R.id.identifyImage);
 
         imageToUpload.setOnClickListener(this);
         identifyImage.setOnClickListener(this);
 
-        outputTextBox = (android.support.v7.widget.AppCompatTextView) findViewById(R.id.outputText);
+        outputTextBox = findViewById(R.id.outputText);
     }
 
     @Override
@@ -260,23 +274,69 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Log.e("JsonObjectRequest", e.getMessage());
         }
     }
+
     public void writeQuote(final JSONObject response) {
+        final LinearLayout f2fCards = (LinearLayout) findViewById(R.id.F2FCards);
+        f2fCards.removeAllViews();
+
         try {
             final TextView readout = findViewById(R.id.jsonResult);
 
             String toDisplay = "";
             JSONArray recipes = (JSONArray) response.get("recipes");
             for (int i = 0; i < recipes.length(); i++) {
-                JSONObject recipe = recipes.getJSONObject(i);
-                String recipeTitle = (String) recipe.get("title");
-                String recipeURL = (String) recipe.get("source_url");
-                String imageURL = (String) recipe.get("image_url");
-                String publisherURL = (String) recipe.get("publisher_url");
-                double socialRank = (double) recipe.get("social_rank");
-                Log.d("ImageURLtosearch", imageURL);
-                Picasso.get().load(imageURL).into(urlImage);
 
-                toDisplay += "Score: " + Math.round(socialRank) + ": " + recipeTitle + " @ " + recipeURL + EOL;
+                final CardView f2fCard = new CardView(mContext);
+                final ImageView foodImage = new ImageView(mContext);
+                final TextView foodTitle = new TextView(mContext);
+                final TextView foodLink = new TextView(mContext);
+                final TextView publisherLink = new TextView(mContext);
+
+                final JSONObject recipe = recipes.getJSONObject(i);
+
+                String imageURL = (String) recipe.get("image_url");
+                foodImage.setImageURI(getImageUri(mContext, getImageBitmap(imageURL.replace("http", "https"))));
+
+                double socialRank = (double) recipe.get("social_rank");
+                String recipeTitle = (String) recipe.get("title");
+                foodTitle.setText(String.format("Score- %.1f: %s", socialRank, recipeTitle));
+
+                final String recipeURL = (String) recipe.get("source_url");
+                foodLink.setText(recipeURL);
+                // SO answer: https://stackoverflow.com/questions/24237278/after-clicking-link-in-texview-how-to-open-that-link-in-webview-instead-of-defa
+//                foodLink.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        WebView webView = findViewById(R.id.recipeViewer);
+//                        webView.getSettings().setJavaScriptEnabled(true);
+//                        webView.loadUrl(recipeURL);
+//                    }}
+//                );
+
+                final String publisherURL = (String) recipe.get("publisher_url");
+                publisherLink.setText(publisherURL);
+//                publisherLink.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        WebView webView = findViewById(R.id.recipeViewer);
+//                        webView.getSettings().setJavaScriptEnabled(true);
+//                        webView.loadUrl(publisherURL);
+//                    }}
+//                );
+
+                LinearLayout horizontalLayout = new LinearLayout(mContext);
+                horizontalLayout.setOrientation(LinearLayout.HORIZONTAL);
+                horizontalLayout.addView(foodImage);
+
+                LinearLayout verticalLayout = new LinearLayout(mContext);
+                verticalLayout.setOrientation(LinearLayout.VERTICAL);
+                verticalLayout.addView(foodTitle);
+                verticalLayout.addView(foodLink);
+                verticalLayout.addView(publisherLink);
+                horizontalLayout.addView(verticalLayout);
+
+                f2fCard.addView(horizontalLayout);
+                f2fCards.addView(f2fCard);
             }
 
             readout.setText(toDisplay);
@@ -285,5 +345,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } catch (ClassCastException exception) {
             Log.e("ClassCastException", exception.getMessage());
         }
+    }
+
+    private Bitmap getImageBitmap(String url) {
+        Bitmap bm = null;
+        try {
+            URL aURL = new URL(url);
+            URLConnection conn = aURL.openConnection();
+            conn.connect();
+            InputStream is = conn.getInputStream();
+            BufferedInputStream bis = new BufferedInputStream(is);
+            bm = BitmapFactory.decodeStream(bis);
+            bis.close();
+            is.close();
+        } catch (IOException e) {
+            Log.e(TAG, "Error getting bitmap", e);
+        }
+        return bm;
+    }
+
+    private Uri getImageUri(Context context, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
     }
 }

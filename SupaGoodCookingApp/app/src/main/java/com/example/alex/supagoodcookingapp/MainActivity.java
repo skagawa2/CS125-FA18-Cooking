@@ -66,6 +66,8 @@ public class MainActivity extends Activity implements View.OnClickListener, Acti
     TextView outputTextBox;
     ClarifaiClient client;
     Uri selectedImage;
+    EditText toAdd;
+    Button add;
 
     Activity mContext;
 
@@ -77,9 +79,11 @@ public class MainActivity extends Activity implements View.OnClickListener, Acti
         setContentView(R.layout.activity_main);
         mContext = this;
 
+        toAdd = findViewById(R.id.toAdd);
         imageToUpload = findViewById(R.id.imageToUpload);
         requestQueue = Volley.newRequestQueue(this);
         identifyImage = findViewById(R.id.identifyImage);
+        add = findViewById(R.id.add);
 
         imageToUpload.setOnClickListener(this);
         identifyImage.setOnClickListener(this);
@@ -102,6 +106,21 @@ public class MainActivity extends Activity implements View.OnClickListener, Acti
                 } catch (Exception e) {
                     Log.e("waitUntilResponse", "exception: " + e.getMessage());
                 }
+                break;
+            case R.id.add:
+                Log.d("toAdd", toAdd.getText().toString());
+                for (int i = 0; i < foodNames.size(); i++) {
+                    Log.d("foodnamesindex", foodNames.get(i));
+                }
+                String addMe = toAdd.getText().toString();
+                if (!foodNames.contains(addMe)) {
+                    foodNames.add(addMe);
+                }
+                String display = new String();
+                for (int i = 0; i < foodNames.size(); i++) {
+                    display += (i + 1) + ")" + " " + foodNames.get(i) + "\n";
+                }
+                outputTextBox.setText(display);
                 break;
         }
     }

@@ -22,6 +22,7 @@ import clarifai2.dto.input.ClarifaiInput;
 import clarifai2.dto.model.output.ClarifaiOutput;
 import clarifai2.dto.prediction.Concept;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.File;
@@ -48,9 +49,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static RequestQueue requestQueue;
     private static final String EOL = "\n";
 
+    EditText toAdd;
     ImageView imageToUpload;
     ImageView urlImage;
     Button identifyImage;
+    Button add;
     android.support.v7.widget.AppCompatTextView outputTextBox;
     ClarifaiClient client;
     Uri selectedImage;
@@ -62,11 +65,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        toAdd = (EditText) findViewById(R.id.toAdd);
         imageToUpload = (ImageView) findViewById(R.id.imageToUpload);
         requestQueue = Volley.newRequestQueue(this);
         identifyImage = (Button) findViewById(R.id.identifyImage);
-        urlImage = (ImageView) findViewById(R.id.urlImage);
+        add = (Button) findViewById(R.id.add);
 
+        add.setOnClickListener(this);
         imageToUpload.setOnClickListener(this);
         identifyImage.setOnClickListener(this);
 
@@ -88,6 +93,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } catch (Exception e) {
                     Log.e("waitUntilResponse", "exception: " + e.getMessage());
                 }
+                break;
+            case R.id.add:
+                Log.d("toAdd", toAdd.getText().toString());
+                for (int i = 0; i < foodNames.size(); i++) {
+                    Log.d("foodnamesindex", foodNames.get(i));
+                }
+                String addMe = toAdd.getText().toString();
+                if (!foodNames.contains(addMe)) {
+                    foodNames.add(addMe);
+                }
+                String display = new String();
+                for (int i = 0; i < foodNames.size(); i++) {
+                    display += (i + 1) + ")" + " " + foodNames.get(i) + "\n";
+                }
+                outputTextBox.setText(display);
                 break;
         }
     }

@@ -147,7 +147,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 
     void startAPICall(View view) {
-
         // create request URL from the food names
         String requestURL = String.format("https://www.food2fork.com/api/search?key=%s&q=",
                 //this key is set up the same way as the Clarifai key
@@ -189,9 +188,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
         f2fCards.removeAllViews();
 
         try {
-            final TextView readout = findViewById(R.id.jsonResult);
-
-            String toDisplay = "";
             JSONArray recipes = (JSONArray) response.get("recipes");
             if (recipes.length() == 0) {
                 final CardView f2fCard = new CardView(mContext);
@@ -273,8 +269,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 f2fCard.addView(horizontalLayout, layoutParams);
                 f2fCards.addView(f2fCard, layoutParams);
             }
-
-            readout.setText(toDisplay);
         } catch (JSONException exception) {
             Log.e("JSONException", exception.getMessage());
         } catch (ClassCastException exception) {

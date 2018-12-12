@@ -55,6 +55,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private static final int RESULT_LOAD_IMAGE = 1;
     private static RequestQueue requestQueue;
 
+    private final List<String> foodNames = new ArrayList<>();
+
     ImageView imageToUpload;
     Button identifyImage;
     TextView outputTextBox;
@@ -186,7 +188,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
             if (recipes.length() == 0) {
                 final CardView f2fCard = new CardView(mContext);
                 final TextView text = new TextView(mContext);
-                text.setText("No results found :(");
+                String msg = "No results found :(";
+                text.setText(msg);
                 f2fCard.addView(text);
                 f2fCard.setRadius(5);
                 f2fCard.setPadding(20, 20, 20, 20);
@@ -210,10 +213,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
                 double socialRank = (double) recipe.get("social_rank");
                 String recipeTitle = (String) recipe.get("title");
-                foodTitle.setText(String.format("Score- %.1f: \n", socialRank));
+                String title = "<a href='food2fork.com'>Food2Fork</a> " + String.format("Score: %.1f out of 100.0", socialRank);
+                foodTitle.setText(Html.fromHtml(title));
 
                 // create an clickable html string, convert it to actual html, then put onto textview
-                final String recipeURL = "<a href='" + recipe.get("source_url") + "'>" + recipeTitle + "</a>";
+                final String recipeURL = "<p><a href='" + recipe.get("source_url") + "'>" + recipeTitle + "</a></p></br></br>";
                 foodLink.setText(Html.fromHtml(recipeURL));
                 foodLink.setMovementMethod(LinkMovementMethod.getInstance());
                 foodLink.setAutoLinkMask(Linkify.WEB_URLS);
@@ -235,23 +239,20 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 verticalLayout.addView(publisherLink);
 
                 horizontalLayout.addView(verticalLayout);
-
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.MATCH_PARENT
-                );
-                // made to set margins, then apply to food (publisher isn't so close)
-                layoutParams.setMargins(0, 5, 15, 0);
-                foodLink.setLayoutParams(layoutParams);
+                horizontalLayout.setWeightSum(1f);
 
                 // to specify weight (the text gets 70% of width)
-                layoutParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.MATCH_PARENT,
-                        .7f
+                        .6f
                 );
                 layoutParams.setMargins(30, 10, 10, 10);
                 verticalLayout.setLayoutParams(layoutParams);
 
-                foodImage.setLayoutParams(new LinearLayout.LayoutParams(400, 400, .3f));
+                layoutParams = new LinearLayout.LayoutParams(450, 450, .4f);
+                layoutParams.setMargins(20, 20, 20, 20);
+                foodImage.setLayoutParams(layoutParams);
+                foodImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
                 // special cardview properties
                 f2fCard.setRadius(5);
@@ -293,11 +294,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 is.close();
             } catch (IOException e) {
                 Log.e(TAG, "Error getting bitmap", e);
-                File imgFile = new  File("question_mark.jpg");
-                if(imgFile.exists()){
-                    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                    toEdit.setImageBitmap(myBitmap);
-                }
             }
             return bm;
         }
@@ -310,10 +306,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
             }
         }
     }
-
-
-
-    private List<String> foodNames = new ArrayList<>();
 
 
     private class IdentifyImageConnection extends AsyncTask<Void, Void, String> {
@@ -336,7 +328,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         maxFoodNameLen = concept.name().length();
                     }
                 }
-                foodNames = new ArrayList<>();
+                foodNames.clear();
                 for (int i = 0; i < output.data().size(); i++) {
                     String foodName = output.data().get(i).name();
                     foodNames.add(foodName);

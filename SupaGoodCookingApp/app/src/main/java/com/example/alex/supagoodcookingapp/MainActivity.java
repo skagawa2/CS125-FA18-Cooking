@@ -28,7 +28,6 @@ import clarifai2.dto.model.output.ClarifaiOutput;
 import clarifai2.dto.prediction.Concept;
 
 import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -129,14 +128,19 @@ public class MainActivity extends Activity implements View.OnClickListener {
     /**
      * From SO Post: https://stackoverflow.com/questions/15432592/get-file-path-of-image-on-android
      *
-     * @param uri
+     * @param uri uri to image
      * @return Return the selected ImagePath
      */
     public String getRealPathFromURI(Uri uri) {
         Cursor cursor = getContentResolver().query(uri, null, null, null, null);
-        cursor.moveToFirst();
-        int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-        return cursor.getString(idx);
+        String result = "";
+        if (cursor != null) {
+            cursor.moveToFirst();
+            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            result = cursor.getString(idx);
+            cursor.close();
+        }
+        return result;
     }
 
 
@@ -276,7 +280,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     private class AsyncGettingBitmapFromUrl extends AsyncTask<String, Void, Bitmap> {
         private ImageView toEdit;
-        public AsyncGettingBitmapFromUrl(ImageView setEdit) {
+        AsyncGettingBitmapFromUrl(ImageView setEdit) {
             toEdit = setEdit;
         }
 
@@ -315,7 +319,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     .foodModel()
                     .predict()
                     .withInputs(ClarifaiInput.forImage(new File(getRealPathFromURI(selectedImage))))
-                    .withMinValue(0.98) // minimum prediction value
+                    .withMinValue(0.95) // minimum prediction value
                     .executeSync()
                     .get();
             Log.d("ClarifaiOutput", "output from API: " + response.toString());

@@ -319,7 +319,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     .foodModel()
                     .predict()
                     .withInputs(ClarifaiInput.forImage(new File(getRealPathFromURI(selectedImage))))
-                    .withMinValue(0.95) // minimum prediction value
+                    .withMinValue(0.98) // minimum prediction value
                     .executeSync()
                     .get();
             Log.d("ClarifaiOutput", "output from API: " + response.toString());

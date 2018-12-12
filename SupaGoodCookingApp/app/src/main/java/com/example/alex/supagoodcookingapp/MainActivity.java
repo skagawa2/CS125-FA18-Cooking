@@ -1,8 +1,6 @@
-
 package com.example.alex.supagoodcookingapp;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -10,12 +8,12 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.view.View;
-import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -38,15 +36,11 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.File;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.HttpResponse;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -56,7 +50,7 @@ import org.json.JSONArray;
 
 import static android.content.ContentValues.TAG;
 
-public class MainActivity extends Activity implements View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
+public class MainActivity extends Activity implements View.OnClickListener {
 
     private static final int RESULT_LOAD_IMAGE = 1;
     private static RequestQueue requestQueue;
@@ -87,6 +81,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Acti
 
         imageToUpload.setOnClickListener(this);
         identifyImage.setOnClickListener(this);
+        add.setOnClickListener(this);
 
         outputTextBox = findViewById(R.id.outputText);
     }
@@ -95,39 +90,33 @@ public class MainActivity extends Activity implements View.OnClickListener, Acti
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.imageToUpload:
-                Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(galleryIntent, RESULT_LOAD_IMAGE);
                 break;
             case R.id.identifyImage:
-                Connection conn = new Connection();
-                conn.execute("");
-                try {
-                    outputTextBox.setText(waitUntilResponse(conn, 10));
-                } catch (Exception e) {
-                    Log.e("waitUntilResponse", "exception: " + e.getMessage());
-                }
+                new IdentifyImageConnection().execute();
                 break;
             case R.id.add:
                 Log.d("toAdd", toAdd.getText().toString());
-                for (int i = 0; i < foodNames.size(); i++) {
-                    Log.d("foodnamesindex", foodNames.get(i));
-                }
                 String addMe = toAdd.getText().toString();
-                if (!foodNames.contains(addMe)) {
-                    foodNames.add(addMe);
+                if (addMe.charAt(0) == '-') {
+                    foodNames.remove(addMe.substring(1));
+                } else if (!foodNames.contains(addMe)) {
+                foodNames.add(addMe);
                 }
-                String display = new String();
+                String display = "Ingredients to search:\n";
                 for (int i = 0; i < foodNames.size(); i++) {
                     display += (i + 1) + ")" + " " + foodNames.get(i) + "\n";
                 }
                 outputTextBox.setText(display);
+                toAdd.setText("");
                 break;
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && data != null) {
             selectedImage = data.getData();
@@ -149,120 +138,11 @@ public class MainActivity extends Activity implements View.OnClickListener, Acti
     }
 
 
-//    private static final int WRITE_EXTERNAL_STORAGE = 0;
-//    private static final int READ_EXTERNAL_STORAGE = 1;
-//
-//    /**
-//     * Requests the Camera permission.
-//     * If the permission has been denied previously, a SnackBar will prompt the user to grant the
-//     * permission, otherwise it is requested directly.
-//     */
-//    private void requestPermissions() {
-//        ActivityCompat.requestPermissions(this, new String[] {
-//                        Manifest.permission.READ_EXTERNAL_STORAGE,
-//                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-//                        Manifest.permission.INTERNET},
-//                WRITE_EXTERNAL_STORAGE);
-//    }
-//
-//    /**
-//     * From Google Sample: https://github.com/googlesamples/android-RuntimePermissions/blob/master/Application/src/main/java/com/example/android/system/runtimepermissions/MainActivity.java
-//     * Callback received when a permissions request has been completed.
-//     */
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, String[] permissions,
-//                                           int[] grantResults) {
-//
-//        if (requestCode == WRITE_EXTERNAL_STORAGE) {
-//            // BEGIN_INCLUDE(permission_result)
-//            // Received permission result for camera permission.
-//            Log.i(TAG, "Received response for Camera permission request: " + Arrays.toString(permissions) + " \ngrantResults: " + Arrays.toString(grantResults));
-//
-//            // Check if the only required permission has been granted
-//            if (grantResults.length == 3 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                // Camera permission has been granted, preview can be displayed
-//                Log.i(TAG, "CAMERA permission has now been granted. Showing preview.");
-//            } else {
-//                Log.i(TAG, "CAMERA permission was NOT granted.");
-//            }
-//            // END_INCLUDE(permission_result)
-//
-//        }
-//    }
-
-    private class Connection extends AsyncTask {
-        @Override
-        protected Object doInBackground(Object... arg0) {
-            connect();
-            return null;
-        }
-
-        private List<ClarifaiOutput<Concept>> response;
-        private String display = "";
-
-        private void connect() {
-            response = client.getDefaultModels()
-                    .foodModel()
-                    .predict()
-                    .withInputs(ClarifaiInput.forImage(new File(getRealPathFromURI(selectedImage))))
-                    .withMinValue(0.98) // minimum prediction value
-                    .executeSync()
-                    .get();
-            Log.d("ClarifaiOutput", "output from API: " + response.toString());
-
-            display = "Clarifai Prediction Rankings: \n";
-            for (ClarifaiOutput<Concept> output : response) {
-                int maxFoodNameLen = 0;
-                for (Concept concept : output.data()) {
-                    if (concept.name().length() > maxFoodNameLen) {
-                        maxFoodNameLen = concept.name().length();
-                    }
-                }
-                foodNames = new ArrayList<>();
-                for (int i = 0; i < output.data().size(); i++) {
-                    String foodName = output.data().get(i).name();
-                    foodNames.add(foodName);
-                    double predictionScore = output.data().get(i).value();
-                    display += String.format("%d) foodName: %-"
-                                    + maxFoodNameLen + "s predictionScore: %.2f%%\n",
-                            i+1, foodName, predictionScore * 100);
-                }
-            }
-        }
-
-        public String getResponse() {
-            return display;
-        }
-    }
-
-    // https://sqa.stackexchange.com/questions/29379/how-to-wait-for-an-api-request-to-return-a-response
-    public String waitUntilResponse(Connection conn, int TIMEOUT) throws Exception {
-        String result = "";
-        int i = 0;
-        while (i < TIMEOUT) {
-            result = conn.getResponse();
-            if (!result.equals("")) {
-                break;
-            } else {
-                Log.d("waitUntilResponse", "waiting...");
-                TimeUnit.SECONDS.sleep(1);
-                ++i;
-                if (i == TIMEOUT) {
-                    throw new TimeoutException("Timed out after waiting for " + i + " seconds");
-                }
-            }
-        }
-        return result;
-    }
-
-    private List<String> foodNames = new ArrayList<>();
-    void startAPICall(android.view.View view) {
-        startAPICall();
-    }
-    void startAPICall() {
+    void startAPICall(View view) {
 
         // create request URL from the food names
-        String requestURL = String.format("https://www.food2fork.com/api/search?key=%s&q=", BuildConfig.Food2ForkApiKey);
+        String requestURL = String.format("https://www.food2fork.com/api/search?key=%s&q=",
+                BuildConfig.Food2ForkApiKey);
         for (String foodName : foodNames) {
             String spaceReplaced = foodName.replace(" ", "%20");
             requestURL += spaceReplaced + ",";
@@ -295,7 +175,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Acti
     }
 
     public void writeQuote(final JSONObject response) {
-        final LinearLayout f2fCards = (LinearLayout) findViewById(R.id.F2FCards);
+        final LinearLayout f2fCards = findViewById(R.id.F2FCards);
         f2fCards.removeAllViews();
 
         try {
@@ -303,8 +183,20 @@ public class MainActivity extends Activity implements View.OnClickListener, Acti
 
             String toDisplay = "";
             JSONArray recipes = (JSONArray) response.get("recipes");
+            if (recipes.length() == 0) {
+                final CardView f2fCard = new CardView(mContext);
+                final TextView text = new TextView(mContext);
+                text.setText("No results found :(");
+                f2fCard.addView(text);
+                f2fCard.setRadius(5);
+                f2fCard.setPadding(20, 20, 20, 20);
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+                );
+                layoutParams.setMargins(20, 20, 20, 20);
+                f2fCards.addView(f2fCard, layoutParams);
+            }
             for (int i = 0; i < recipes.length(); i++) {
-
                 final CardView f2fCard = new CardView(mContext);
                 final ImageView foodImage = new ImageView(mContext);
                 final TextView foodTitle = new TextView(mContext);
@@ -314,34 +206,23 @@ public class MainActivity extends Activity implements View.OnClickListener, Acti
                 final JSONObject recipe = recipes.getJSONObject(i);
 
                 String imageURL = (String) recipe.get("image_url");
-                foodImage.setImageURI(getImageUri(mContext, getImageBitmap(imageURL.replace("http", "https"))));
+                new AsyncGettingBitmapFromUrl(foodImage).execute(imageURL);
 
                 double socialRank = (double) recipe.get("social_rank");
                 String recipeTitle = (String) recipe.get("title");
-                foodTitle.setText(String.format("Score- %.1f: %s", socialRank, recipeTitle));
+                foodTitle.setText(String.format("Score- %.1f: \n", socialRank));
 
-                final String recipeURL = (String) recipe.get("source_url");
-                foodLink.setText(recipeURL);
-                // SO answer: https://stackoverflow.com/questions/24237278/after-clicking-link-in-texview-how-to-open-that-link-in-webview-instead-of-defa
-//                foodLink.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        WebView webView = findViewById(R.id.recipeViewer);
-//                        webView.getSettings().setJavaScriptEnabled(true);
-//                        webView.loadUrl(recipeURL);
-//                    }}
-//                );
+                // create an clickable html string, convert it to actual html, then put onto textview
+                final String recipeURL = "<a href='" + recipe.get("source_url") + "'>" + recipeTitle + "</a>";
+                foodLink.setText(Html.fromHtml(recipeURL));
+                foodLink.setMovementMethod(LinkMovementMethod.getInstance());
+                foodLink.setAutoLinkMask(Linkify.WEB_URLS);
 
-                final String publisherURL = (String) recipe.get("publisher_url");
-                publisherLink.setText(publisherURL);
-//                publisherLink.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        WebView webView = findViewById(R.id.recipeViewer);
-//                        webView.getSettings().setJavaScriptEnabled(true);
-//                        webView.loadUrl(publisherURL);
-//                    }}
-//                );
+                // create an clickable html string, convert it to actual html, then put onto textview
+                final String publisherURL = "<a href='" + recipe.get("publisher_url") + "'>Publisher Link</a>";
+                publisherLink.setText(Html.fromHtml(publisherURL));
+                publisherLink.setMovementMethod(LinkMovementMethod.getInstance());
+                publisherLink.setAutoLinkMask(Linkify.WEB_URLS);
 
                 LinearLayout horizontalLayout = new LinearLayout(mContext);
                 horizontalLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -352,10 +233,36 @@ public class MainActivity extends Activity implements View.OnClickListener, Acti
                 verticalLayout.addView(foodTitle);
                 verticalLayout.addView(foodLink);
                 verticalLayout.addView(publisherLink);
+
                 horizontalLayout.addView(verticalLayout);
 
-                f2fCard.addView(horizontalLayout);
-                f2fCards.addView(f2fCard);
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.MATCH_PARENT
+                );
+                // made to set margins, then apply to food (publisher isn't so close)
+                layoutParams.setMargins(0, 5, 15, 0);
+                foodLink.setLayoutParams(layoutParams);
+
+                // to specify weight (the text gets 70% of width)
+                layoutParams = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.MATCH_PARENT,
+                        .7f
+                );
+                layoutParams.setMargins(30, 10, 10, 10);
+                verticalLayout.setLayoutParams(layoutParams);
+
+                foodImage.setLayoutParams(new LinearLayout.LayoutParams(400, 400, .3f));
+
+                // special cardview properties
+                f2fCard.setRadius(5);
+                f2fCard.setPadding(20, 20, 20, 20);
+                layoutParams = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+                );
+                layoutParams.setMargins(20, 20, 20, 20);
+
+                f2fCard.addView(horizontalLayout, layoutParams);
+                f2fCards.addView(f2fCard, layoutParams);
             }
 
             readout.setText(toDisplay);
@@ -366,27 +273,86 @@ public class MainActivity extends Activity implements View.OnClickListener, Acti
         }
     }
 
-    private Bitmap getImageBitmap(String url) {
-        Bitmap bm = null;
-        try {
-            URL aURL = new URL(url);
-            URLConnection conn = aURL.openConnection();
-            conn.connect();
-            InputStream is = conn.getInputStream();
-            BufferedInputStream bis = new BufferedInputStream(is);
-            bm = BitmapFactory.decodeStream(bis);
-            bis.close();
-            is.close();
-        } catch (IOException e) {
-            Log.e(TAG, "Error getting bitmap", e);
+    private class AsyncGettingBitmapFromUrl extends AsyncTask<String, Void, Bitmap> {
+        private ImageView toEdit;
+        public AsyncGettingBitmapFromUrl(ImageView setEdit) {
+            toEdit = setEdit;
         }
-        return bm;
+
+        @Override
+        protected Bitmap doInBackground(String... params) {
+            Bitmap bm = null;
+            try {
+                URL aURL = new URL(params[0].replace("http", "https"));
+                URLConnection conn = aURL.openConnection();
+                conn.connect();
+                InputStream is = conn.getInputStream();
+                BufferedInputStream bis = new BufferedInputStream(is);
+                bm = BitmapFactory.decodeStream(bis);
+                bis.close();
+                is.close();
+            } catch (IOException e) {
+                Log.e(TAG, "Error getting bitmap", e);
+                File imgFile = new  File("question_mark.jpg");
+                if(imgFile.exists()){
+                    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                    toEdit.setImageBitmap(myBitmap);
+                }
+            }
+            return bm;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap result) {
+            if (result != null) {
+                toEdit.setImageBitmap(result);
+                Log.d("Bitmap/onPostExecute", "result posted");
+            }
+        }
     }
 
-    private Uri getImageUri(Context context, Bitmap inImage) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), inImage, "Title", null);
-        return Uri.parse(path);
+
+
+    private List<String> foodNames = new ArrayList<>();
+
+
+    private class IdentifyImageConnection extends AsyncTask<Void, Void, String> {
+        @Override
+        protected String doInBackground(Void... arg0) {
+            List<ClarifaiOutput<Concept>> response = client.getDefaultModels()
+                    .foodModel()
+                    .predict()
+                    .withInputs(ClarifaiInput.forImage(new File(getRealPathFromURI(selectedImage))))
+                    .withMinValue(0.98) // minimum prediction value
+                    .executeSync()
+                    .get();
+            Log.d("ClarifaiOutput", "output from API: " + response.toString());
+
+            String display = "Clarifai Prediction Rankings: \n";
+            for (ClarifaiOutput<Concept> output : response) {
+                int maxFoodNameLen = 0;
+                for (Concept concept : output.data()) {
+                    if (concept.name().length() > maxFoodNameLen) {
+                        maxFoodNameLen = concept.name().length();
+                    }
+                }
+                foodNames = new ArrayList<>();
+                for (int i = 0; i < output.data().size(); i++) {
+                    String foodName = output.data().get(i).name();
+                    foodNames.add(foodName);
+                    double predictionScore = output.data().get(i).value();
+                    display += String.format("%d) foodName: %-"
+                                    + maxFoodNameLen + "s predictionScore: %.2f%%\n",
+                            i+1, foodName, predictionScore * 100);
+                }
+            }
+            return display;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            outputTextBox.setText(result);
+            Log.d("Identify/onPostExecute", result);
+        }
     }
 }

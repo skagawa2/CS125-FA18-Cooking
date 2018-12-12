@@ -5,6 +5,14 @@
 This project is meant to be an exploration of Web APIs in order to make a simple Android application.
 
 
+## To run
+
+Clone this repo using `git clone` and add these lines to the gradle.properties file:
+```
+CLARIFAI_API_KEY = '(insert Clarifai API key here)'
+FOOD2FORK_API_KEY = '(insert Food2Fork API key here)'
+```
+
 ## Methods
 
 We primarily used two APIs we found online: Clarifai and Food2Fork.

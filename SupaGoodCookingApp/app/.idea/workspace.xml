@@ -18,13 +18,10 @@
     <configurations />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="674d80ed-b75d-4945-9a94-544e80067b0b" name="Default" comment="">
+    <list default="true" id="674d80ed-b75d-4945-9a94-544e80067b0b" name="Default" comment="cleaning up code">
       <change afterPath="$PROJECT_DIR$/gradle.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/alex/supagoodcookingapp/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/alex/supagoodcookingapp/MainActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_main.xml" afterDir="false" />
     </list>
     <list id="181dd848-2100-44dd-88c1-e060653b0d19" name="API Key" comment="don't commit" />
     <ignored path="$PROJECT_DIR$/../.gradle/" />
@@ -109,8 +106,8 @@
             <state />
           </provider>
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="246" column="58" lean-forward="true" selection-start-line="246" selection-start-column="58" selection-end-line="246" selection-end-column="58" />
+            <state relative-caret-position="404">
+              <caret line="246" column="58" selection-start-line="246" selection-start-column="58" selection-end-line="246" selection-end-column="58" />
             </state>
           </provider>
         </entry>
@@ -118,7 +115,7 @@
       <file leaf-file-name="build.gradle" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/build.gradle">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="162">
+            <state relative-caret-position="300">
               <caret line="20" selection-start-line="20" selection-end-line="20" />
             </state>
           </provider>
@@ -175,16 +172,10 @@
       <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/example/alex/supagoodcookingapp/MainActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1616">
+            <state relative-caret-position="1485">
               <caret line="146" column="34" selection-start-line="146" selection-start-column="34" selection-end-line="146" selection-end-column="34" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#5557#5868#0" expanded="true" />
-                <element signature="e#5867#5868#0" expanded="true" />
-                <element signature="e#5870#6084#0" expanded="true" />
-                <element signature="e#6083#6084#0" expanded="true" />
-                <element signature="e#11373#11374#0" expanded="true" />
-                <element signature="e#11413#11414#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -2520,7 +2511,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -2569,6 +2559,8 @@
           <select />
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="AndroidView">
         <subPane>
           <expand>
@@ -2584,7 +2576,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -2844,7 +2835,14 @@
       <option name="project" value="LOCAL" />
       <updated>1544595274541</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="cleaning up code">
+      <created>1544626919133</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1544626919133</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -2893,63 +2891,37 @@
     <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="Android Profiler" order="7" />
-      <window_info id="Build Variants" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.50500715" side_tool="true" visible="true" weight="0.38076922" />
-      <window_info active="true" anchor="bottom" id="Logcat" order="7" sideWeight="0.49499285" visible="true" weight="0.38076922" />
-      <window_info id="Capture Tool" order="2" />
-      <window_info id="Designer" order="2" />
-      <window_info anchor="bottom" id="Build" order="7" sideWeight="0.49499285" weight="0.32820514" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49928468" weight="0.4" />
-      <window_info anchor="right" id="Device File Explorer" order="3" side_tool="true" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32948717" />
-      <window_info anchor="bottom" id="Messages" order="7" sideWeight="0.4985694" weight="0.32948717" />
       <window_info anchor="right" id="Palette&#9;" order="3" />
       <window_info id="Image Layers" order="2" />
+      <window_info id="Build Variants" order="2" side_tool="true" />
       <window_info anchor="right" id="Capture Analysis" order="3" />
+      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.50429183" side_tool="true" weight="0.38076922" />
       <window_info anchor="right" id="Preview" order="3" weight="0.3297568" />
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49785408" weight="0.32820514" />
       <window_info anchor="bottom" id="Version Control" order="7" sideWeight="0.4985694" weight="0.26666668" />
       <window_info anchor="bottom" id="CheckStyle" order="7" weight="0.32948717" />
-      <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.49928468" weight="0.34102565" />
+      <window_info anchor="bottom" id="Terminal" order="7" weight="0.32820514" />
+      <window_info active="true" anchor="bottom" id="Logcat" order="7" sideWeight="0.49570817" visible="true" weight="0.38076922" />
       <window_info id="Captures" order="2" weight="0.24964234" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2532189" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32948717" />
-      <window_info anchor="right" id="Gradle" order="3" weight="0.3297568" />
-      <window_info anchor="right" id="Theme Preview" order="3" />
-      <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info id="Build Variants" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.50429183" side_tool="true" weight="0.38076922" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2532189" />
-      <window_info anchor="right" id="Preview" order="3" weight="0.3297568" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="bottom" id="Messages" order="7" sideWeight="0.4985694" weight="0.32948717" />
-      <window_info anchor="bottom" id="Logcat" order="7" sideWeight="0.49570817" weight="0.38076922" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="right" id="Palette&#9;" order="3" />
-      <window_info anchor="bottom" id="Version Control" order="7" sideWeight="0.4985694" weight="0.26666668" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49928468" weight="0.4" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info id="Image Layers" order="2" />
-      <window_info anchor="right" id="Theme Preview" order="3" />
-      <window_info anchor="bottom" id="Android Profiler" order="7" />
       <window_info id="Capture Tool" order="2" />
-      <window_info anchor="bottom" id="CheckStyle" order="7" weight="0.32948717" />
-      <window_info anchor="right" id="Capture Analysis" order="3" />
-      <window_info anchor="bottom" id="TODO" order="6" weight="0.32948717" />
+      <window_info id="Designer" order="2" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2532189" />
+      <window_info anchor="bottom" id="Build" order="7" sideWeight="0.49570817" weight="0.32820514" />
+      <window_info anchor="right" id="Gradle" order="3" weight="0.3297568" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="right" id="Device File Explorer" order="3" side_tool="true" />
+      <window_info anchor="right" id="Theme Preview" order="3" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49928468" weight="0.4" />
       <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Messages" order="7" sideWeight="0.4985694" weight="0.32948717" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32948717" />
-      <window_info anchor="right" id="Device File Explorer" order="3" side_tool="true" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49785408" weight="0.32820514" />
-      <window_info active="true" anchor="bottom" id="Build" order="7" sideWeight="0.49570817" visible="true" weight="0.32820514" />
-      <window_info anchor="bottom" id="Terminal" order="7" weight="0.32820514" />
-      <window_info id="Captures" order="2" weight="0.24964234" />
-      <window_info anchor="right" id="Gradle" order="3" weight="0.3297568" />
-      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
-      <window_info id="Designer" order="2" />
     </layout>
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -2995,7 +2967,8 @@
     <MESSAGE value="started adding CardViews" />
     <MESSAGE value="accidentally overwrote Alex's changes" />
     <MESSAGE value="pretty much finished app: properly added cards, added links" />
-    <option name="LAST_COMMIT_MESSAGE" value="pretty much finished app: properly added cards, added links" />
+    <MESSAGE value="cleaning up code" />
+    <option name="LAST_COMMIT_MESSAGE" value="cleaning up code" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/main/res/layout/activity_main.xml">
@@ -3200,13 +3173,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/build/generated/source/buildConfig/debug/com/example/alex/supagoodcookingapp/BuildConfig 2.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/build/generated/source/buildConfig/debug/com/example/alex/supagoodcookingapp/BuildConfig 2.java" />
     <entry file="file://$PROJECT_DIR$/gradle.properties">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="225">
@@ -3223,7 +3190,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/build.gradle">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
+        <state relative-caret-position="300">
           <caret line="20" selection-start-line="20" selection-end-line="20" />
         </state>
       </provider>
@@ -3237,16 +3204,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/example/alex/supagoodcookingapp/MainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1616">
+        <state relative-caret-position="1485">
           <caret line="146" column="34" selection-start-line="146" selection-start-column="34" selection-end-line="146" selection-end-column="34" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#5557#5868#0" expanded="true" />
-            <element signature="e#5867#5868#0" expanded="true" />
-            <element signature="e#5870#6084#0" expanded="true" />
-            <element signature="e#6083#6084#0" expanded="true" />
-            <element signature="e#11373#11374#0" expanded="true" />
-            <element signature="e#11413#11414#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -3256,8 +3217,8 @@
         <state />
       </provider>
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="246" column="58" lean-forward="true" selection-start-line="246" selection-start-column="58" selection-end-line="246" selection-end-column="58" />
+        <state relative-caret-position="404">
+          <caret line="246" column="58" selection-start-line="246" selection-start-column="58" selection-end-line="246" selection-end-column="58" />
         </state>
       </provider>
     </entry>

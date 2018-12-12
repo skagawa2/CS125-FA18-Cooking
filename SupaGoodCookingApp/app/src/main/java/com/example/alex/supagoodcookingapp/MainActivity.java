@@ -68,6 +68,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //ClarifaiApiKey is hidden and not uploaded to Github, so you will need to get your own key
+        //input your key into the gradle.properties file like this: CLARIFAI_API_KEY="YourKeyHere"
         client = new ClarifaiBuilder(BuildConfig.ClarifaiApiKey).buildSync();
 
         super.onCreate(savedInstanceState);
@@ -148,6 +150,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         // create request URL from the food names
         String requestURL = String.format("https://www.food2fork.com/api/search?key=%s&q=",
+                //this key is set up the same way as the Clarifai key
+                //input your key in gradle.properties like this: FOOD2FORK_API_KEY="YourKeyHere"
                 BuildConfig.Food2ForkApiKey);
         for (String foodName : foodNames) {
             String spaceReplaced = foodName.replace(" ", "%20");
